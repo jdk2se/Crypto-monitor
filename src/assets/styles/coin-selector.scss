@@ -1,0 +1,35 @@
+@import "vue-select/dist/vue-select.css";
+
+:root,
+:host {
+  --vs-colors--lightest: rgba(241, 233, 218, 0.27);
+  --vs-colors--light: rgba(255, 253, 253, 0.75);
+  --vs-colors--dark: $main-color;
+  --vs-colors--darkest: rgba(0, 0, 0, 0.15);
+
+  /* Search Input */
+  --vs-search-input-color: inherit;
+  --vs-search-input-bg: rgb(255, 255, 255);
+  --vs-search-input-placeholder-color: inherit;
+
+  /* Dropdown */
+  --vs-dropdown-bg: #fff;
+  --vs-dropdown-color: #000;
+  --vs-dropdown-z-index: 1000;
+  --vs-dropdown-min-width: 160px;
+  --vs-dropdown-max-height: 350px;
+  --vs-dropdown-box-shadow: 0px 3px 6px 0px var(--vs-colors--darkest);
+}
+
+.coin-selector {
+  &__option {
+    display: flex;
+    align-items: center;
+  }
+  
+  &__img {
+    width: 50px;
+    display: inline-block;
+    margin-right: 20px;
+  }
+}

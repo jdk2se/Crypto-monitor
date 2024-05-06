@@ -1,4 +1,5 @@
-@import "@/assets/styles/variables";
+@import "./variables";
+@import "./coin-selector";
 
 #app {
   max-width: 1280px;
@@ -12,4 +13,8 @@
 .nav__item {
   color: $main-color;
   text-decoration: none;
+}
+
+.router-link-active  {
+  text-decoration: underline; // @TODO DudnikES 
 }
