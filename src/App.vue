@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <div class="content__wrapper">
+  <div class="content__wrapper" v-if="!coinStore.isLoading">
     <router-view />
   </div>
 </template>
@@ -10,7 +10,8 @@ import Header from "@/components/Header.vue";
 import { onBeforeMount } from "vue";
 import { useCoinStore } from "@/stores/coinStore.ts";
 
+const coinStore = useCoinStore();
 onBeforeMount(() => {
-  useCoinStore().getPairData();
+  coinStore.getPairData();
 });
 </script>

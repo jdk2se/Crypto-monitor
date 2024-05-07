@@ -1,5 +1,6 @@
 import { IServerData } from "@/types/IServerResponse.ts";
 import { IOrderBookItem } from "@/types/IOrderBookItem.ts";
+import { IWSData } from "@/types/IWSResponse.ts";
 
 export function getCurrentDate() {
     let date = new Date();
@@ -17,17 +18,33 @@ export function getCurrentDate() {
     );
 }
 
-export function getOrderBookItem(data: IServerData): {[key: string]: IOrderBookItem} {
-    const ask: IOrderBookItem = {
-        symbol: data.symbol,
-        price: parseToNumber(data.askPrice),
-        qty: parseToNumber(data.askQty),        
-    };
-    
-    const bid: IOrderBookItem = {
-        symbol: data.symbol,
-        price: parseToNumber(data.bidPrice),
-        qty: parseToNumber(data.bidQty),
+export function getOrderBookItem(data: IServerData | IWSData): {[key: string]: IOrderBookItem} {
+    let ask: IOrderBookItem | null = null;
+    let bid: IOrderBookItem| null = null
+    if ('symbol' in data) {
+        ask = {
+            symbol: data.symbol,
+            price: parseToNumber(data.askPrice),
+            qty: parseToNumber(data.askQty),
+        };
+
+        bid = {
+            symbol: data.symbol,
+            price: parseToNumber(data.bidPrice),
+            qty: parseToNumber(data.bidQty),
+        }
+    } else {
+        ask  = {
+            symbol: data.s,
+            price: parseToNumber(data.a),
+            qty: parseToNumber(data.A),
+        };
+
+        bid = {
+            symbol: data.s,
+            price: parseToNumber(data.b),
+            qty: parseToNumber(data.B),
+        }
     }
     
     return {
@@ -35,6 +52,8 @@ export function getOrderBookItem(data: IServerData): {[key: string]: IOrderBookI
         bid
     };
 }
+
+export const getWSUrl = (coinsPair: string) => `wss://stream.binance.com:9443/ws/${coinsPair.toLocaleLowerCase()}@bookTicker`;
 
 function padTwoDigits(num: number) {
     return num.toString().padStart(2, "0");

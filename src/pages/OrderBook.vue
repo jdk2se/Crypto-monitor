@@ -6,42 +6,39 @@
   >    
     <div class="order-book__container">
       <OrderBookTable 
-          :title="ask" 
-          :data="askItems" 
+          :title="ASK" 
+          :data="coinStore.getAskItems" 
           @change-limit="changeLimit"
       />
     </div>
     <div class="order-book__container">
       <OrderBookTable 
-          :title="bid" 
-          :data="bidItems"
+          :title="BID" 
+          :data="coinStore.getBidItems"
           @change-limit="changeLimit"
       />
     </div>
   </div>
   <div v-else>
-    <router-link to="/settings">Select</router-link> coin pair.
+    <router-link to="/settings" class="nav__item">Select</router-link> coin pair.
   </div>
 </template>
 
 <script setup lang="ts">
 import { useCoinStore } from "@/stores/coinStore.ts";
 import OrderBookTable from "@/components/OrderBookTable.vue";
-import { ref } from "vue";
 
 const coinStore = useCoinStore();
-const ask = 'Ask';
-const bid = 'Bid';
-const askItems = ref(coinStore.getAskItems());
-const bidItems = ref(coinStore.getBidItems());
+const ASK = 'Ask';
+const BID = 'Bid';
 
 const changeLimit = (title: string, limit: number) => {
-  if (title === ask) {
-    askItems.value = coinStore.getAskItems(limit);
+  if (title === ASK) {
+    coinStore.setAskLimit(limit);
   }
-  
-  if (title === bid) {
-    bidItems.value = coinStore.getBidItems(limit);  
+
+  if (title === BID) {
+    coinStore.setBidLimit(limit);
   }  
 }
 </script>
