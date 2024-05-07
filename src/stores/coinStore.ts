@@ -2,14 +2,23 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 import { AvailablePairs } from "@/types/coins.ts";
 import axios from "axios";
 import { IChangeLogItem } from "@/types/IChangeLogItem.ts";
-import { getCurrentDate } from "@/utils/helper.ts";
+import { getCurrentDate, getOrderBookItem } from "@/utils/helper.ts";
+import { IServerResponse } from "@/types/IServerResponse.ts";
+import { IOrderBookItem } from "@/types/IOrderBookItem.ts";
 
 export const useCoinStore = defineStore('coinStore', {
     state: () => ({
         activePair: <AvailablePairs>'BTCUSDT',
         changeLog: <IChangeLogItem[]>[],
+        isLoading: false, // @TODO DudnikES preloader
+        askItems: <IOrderBookItem[]>[],
+        bidItems: <IOrderBookItem[]>[],
     }),
-    getters: {},
+    getters: {
+        getLogs: (state) => state.changeLog,
+        hasLogs: (state) => state.changeLog.length > 0,
+        hasOrderBook: (state) => state.askItems.length > 0,
+    },
     actions: {
         setActivePair(pair: AvailablePairs)  {
             const changeItem: IChangeLogItem = {
@@ -17,15 +26,24 @@ export const useCoinStore = defineStore('coinStore', {
                 to: pair,
                 date: getCurrentDate(),
             };
-            this.changeLog.push(changeItem);
+            this.changeLog.unshift(changeItem);
             this.activePair = pair;
-            // axios.get(`https://api.binance.com/api/v3/exchangeInfo?symbol=${pair}`)
-            // .then((response) => {
-            //     console.log(response);// @TODO DudnikES
-            //
-            //     
-            //     
-            // })
+            this.askItems = [];
+            this.bidItems = [];
+            this.getPairData();           
+        },
+        getPairData() {            
+            axios.get(`https://api.binance.com/api/v3/ticker/bookTicker?symbol=${this.activePair}`)
+                .then((response: IServerResponse) => {
+                    const { data } = response;
+                    const orderBookItems = getOrderBookItem(data);
+
+                    this.askItems.push(orderBookItems.ask);
+                    this.bidItems.push(orderBookItems.bid);
+                })
+                .catch((e) => {
+                    console.error(e);
+                });
         }
     },
     

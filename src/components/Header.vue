@@ -37,6 +37,8 @@ header {
   justify-content: space-between;
   height: 50px;
   padding: 0 20px 0 0;
+  z-index: 1;
+  background: #181A20;
   
   .header__logo {
     width: 80px;
