@@ -18,6 +18,12 @@ export const useCoinStore = defineStore('coinStore', {
         getLogs: (state) => state.changeLog,
         hasLogs: (state) => state.changeLog.length > 0,
         hasOrderBook: (state) => state.askItems.length > 0,
+        getAskItems: (state) => {
+            return (limit = 100) => state.askItems.slice(0, limit)
+        },
+        getBidItems: (state) => {
+            return (limit = 100) => state.bidItems.slice(0, limit)
+        },
     },
     actions: {
         setActivePair(pair: AvailablePairs)  {
@@ -32,7 +38,7 @@ export const useCoinStore = defineStore('coinStore', {
             this.bidItems = [];
             this.getPairData();           
         },
-        getPairData() {            
+        getPairData() {
             axios.get(`https://api.binance.com/api/v3/ticker/bookTicker?symbol=${this.activePair}`)
                 .then((response: IServerResponse) => {
                     const { data } = response;

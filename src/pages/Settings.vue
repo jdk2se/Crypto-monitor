@@ -54,11 +54,25 @@ const coinPairs: AvailablePairs[]  = ['BTCUSDT', 'BNBBTC', 'ETHBTC'];
 </script>
 
 <style lang="scss" scoped>
+.settings {
+  height: 100%;
+}
+
 .settings-table {
   grid-template-columns: 
     minmax(150px, 1fr)
     minmax(150px, 1.67fr)
     minmax(150px, 1.67fr)
     minmax(150px, 1.67fr);
-} 
+}
+
+@media screen and (max-width: 700px) {
+  .settings-table {
+    grid-template-columns: 
+      minmax(30px, 15%)
+      minmax(70px, 20%)
+      minmax(70px, 20%)
+      minmax(70px, 45%);
+  } 
+}
 </style>

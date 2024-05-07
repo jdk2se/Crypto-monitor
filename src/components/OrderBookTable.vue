@@ -1,5 +1,16 @@
 <template>
-  <div>{{ title }}</div>
+  <div class="order-book__table_header">
+    <span>{{ title }}</span>
+    <span>Show: </span>
+    <select 
+        v-model="limit" 
+        @change="$emit('changeLimit', title, limit)"
+    >
+      <option>100</option>
+      <option>500</option>
+      <option>1000</option>
+    </select>
+  </div>  
   <table class="table order-book__table">
     <thead>
     <tr>
@@ -23,11 +34,18 @@
 
 <script setup lang="ts">
 import { IOrderBookItem } from "@/types/IOrderBookItem.ts";
+import { ref } from "vue";
 
 defineProps<{
   title: string,
   data: IOrderBookItem[],
 }>();
+
+defineEmits<{
+  (e: 'changeLimit', title: string, limit: number): void  
+}>()
+
+const limit = ref(100);
 </script>
 
 <style scoped lang="scss">
@@ -37,6 +55,10 @@ defineProps<{
     minmax(150px, 1fr)
     minmax(150px, 1.67fr)
     minmax(150px, 1.67fr);    
+    
+    &_header {
+      margin-bottom: 5px;
+    }
   }
 }
 
