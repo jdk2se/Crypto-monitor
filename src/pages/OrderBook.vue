@@ -1,20 +1,20 @@
 <template>
   <h3>Active pair: {{ coinStore.activePair }}</h3>
   <div 
-      v-if="coinStore.hasOrderBook"
+      v-if="orderBookStore.hasOrderBook"
       class="order-book" 
   >    
     <div class="order-book__container">
       <OrderBookTable 
           :title="ASK" 
-          :data="coinStore.getAskItems" 
+          :data="orderBookStore.getAskItems" 
           @change-limit="changeLimit"
       />
     </div>
     <div class="order-book__container">
       <OrderBookTable 
           :title="BID" 
-          :data="coinStore.getBidItems"
+          :data="orderBookStore.getBidItems"
           @change-limit="changeLimit"
       />
     </div>
@@ -25,20 +25,22 @@
 </template>
 
 <script setup lang="ts">
-import { useCoinStore } from "@/stores/coinStore.ts";
 import OrderBookTable from "@/components/OrderBookTable.vue";
+import { useOrderBookStore } from "@/stores/orderBookStore.ts";
+import { useCoinStore } from "@/stores/coinStore.ts";
 
+const orderBookStore = useOrderBookStore();
 const coinStore = useCoinStore();
 const ASK = 'Ask';
 const BID = 'Bid';
 
 const changeLimit = (title: string, limit: number) => {
   if (title === ASK) {
-    coinStore.setAskLimit(limit);
+    orderBookStore.setAskLimit(limit);
   }
 
   if (title === BID) {
-    coinStore.setBidLimit(limit);
+    orderBookStore.setBidLimit(limit);
   }  
 }
 </script>

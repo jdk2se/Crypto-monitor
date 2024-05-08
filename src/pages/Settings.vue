@@ -10,7 +10,7 @@
       <template #option="option">
         <div class="coin-selector__option">        
           <img 
-              :src="`${option.label}.png`" 
+              :src="imageUrls[option.label].src" 
                class="coin-selector__img"
               rel="preload"
           />
@@ -48,9 +48,19 @@
 <script setup lang="ts">
 import { AvailablePairs } from "@/types/coins.ts";
 import { useCoinStore } from "@/stores/coinStore.ts";
+import { onBeforeMount } from "vue";
 
 const coinStore = useCoinStore();
 const coinPairs: AvailablePairs[]  = ['BTCUSDT', 'BNBBTC', 'ETHBTC'];
+const imageUrls: {[key:string]: HTMLImageElement} = {};
+
+onBeforeMount(() => {  
+  for (let coinPair of coinPairs) {
+    const img = new Image();
+    img.src = `${coinPair}.png`;
+    imageUrls[coinPair] = img; 
+  }
+});
 </script>
 
 <style lang="scss" scoped>
